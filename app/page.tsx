@@ -1,9 +1,14 @@
 import { Users, DollarSign, ShoppingCart, TrendingUp } from "lucide-react";
+import { headers } from "next/headers";
 import StatCard from "./components/StatCard";
 import SalesChart from "./components/SalesChart";
 
 async function getDashboard() {
-  const res = await fetch("http://localhost:3000/api/dashboard", {
+  const headersList = await headers();
+  const host = headersList.get("host") ?? "localhost:3000";
+  const protocol = process.env.NODE_ENV === "production" ? "https" : "http";
+
+  const res = await fetch(`${protocol}://${host}/api/dashboard`, {
     cache: "no-store",
   });
   if (!res.ok) return null;
@@ -21,7 +26,6 @@ interface TopSeller {
   id: number;
   name: string;
   sellerCode: string;
-  whatsapp: string;
   totalSales: number;
   totalRevenue: number;
 }
